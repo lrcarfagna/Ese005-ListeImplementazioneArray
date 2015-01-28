@@ -11,8 +11,20 @@
  * Returns -1 if memory allocation fails.
  */
 int ALIncreaseAndCopy(AList *list, int size, int *dimension) {
-    // TODO Implement code here
-    return -1;
+    int i;
+    int returnValue;
+    AList nuovoVettore;
+    if(*dimension==0) *dimension=1;
+    nuovoVettore=(AList)malloc(2*(*dimension)*sizeof(int));
+    if(nuovoVettore!=NULL){
+        *dimension*=2;
+        for(i=0;i<size;i++){
+            nuovoVettore[i]=(*list)[i];
+        }
+        *list=&nuovoVettore;
+        returnValue=0;
+    }else returnValue=-1;
+    return returnValue;
 }
 
 /*
@@ -25,7 +37,12 @@ int ALIncreaseAndCopy(AList *list, int size, int *dimension) {
  * Returns -1 if memory allocation fails.
  */
 int ALInsertAtBeginning(AList *list, int *size, int *dimension, int key) {
-    // TODO Implement code here
+    int r;
+    if(*size==*dimension){
+        r=ALIncreaseAndCopy(list,*size,dimension);
+        
+    }
+    
     return -1;
 }
 
