@@ -14,14 +14,14 @@ int ALIncreaseAndCopy(AList *list, int size, int *dimension) {
     int i;
     int returnValue;
     AList nuovoVettore;
-    if(*dimension==0) *dimension=1;
+    if((*dimension)==0) *dimension=1;
     nuovoVettore=(AList)malloc(2*(*dimension)*sizeof(int));
     if(nuovoVettore!=NULL){
         *dimension*=2;
         for(i=0;i<size;i++){
             nuovoVettore[i]=(*list)[i];
         }
-        *list=&nuovoVettore;
+        *list=nuovoVettore;
         returnValue=0;
     }else returnValue=-1;
     return returnValue;
@@ -37,13 +37,18 @@ int ALIncreaseAndCopy(AList *list, int size, int *dimension) {
  * Returns -1 if memory allocation fails.
  */
 int ALInsertAtBeginning(AList *list, int *size, int *dimension, int key) {
-    int r;
-    if(*size==*dimension){
+    int r,i;
+    if((*size)==(*dimension)){
         r=ALIncreaseAndCopy(list,*size,dimension);
-        
     }
-    
-    return -1;
+    if(r==0){
+        for(i=*size;i>0;i--){
+            (*list)[i]=(*list)[i-1];
+        }
+        (*list)[0]=key;
+        (*size)++;
+    }
+    return r;
 }
 
 /*
@@ -83,8 +88,22 @@ int ALInsertAtPosition(AList *list, int *size, int *dimension, int key, int posi
  * Returns -1 if there is no key at the specified position
  */ 
 int ALGetKey(AList list, int size, int position, int *key) {
-    // TODO Implement code here
-    return -1;
+    int i=0,returnValue;
+    int dimension=0;
+    if(list!=NULL){
+        while(list[i]!='\0'){
+            i++;
+        }
+        dimension=i;
+    }
+    if(position<dimension){
+            *key=list[position];
+             returnValue=0;
+    }
+    
+    else returnValue=-1;
+    
+    return returnValue;
 }
 
 /*
