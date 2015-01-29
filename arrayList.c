@@ -127,8 +127,19 @@ int ALFindKey(AList list, int size, int key, int startPosition, int *position) {
  * Returns -1 in case of empty list.
  */
 int ALRemoveFirst(AList list, int *size) {
-    // TODO Implement code here
-    return -1;
+    int i=0;
+    int returnValue;
+    if(list!=NULL){
+        while(list[i]!='\0'){
+            list[i]=list[i+1];
+            i++;
+        }
+        returnValue=0;
+        (*size)--;
+    }
+    
+    else returnValue=-1;
+    return returnValue;
 }
 
 /*
@@ -140,8 +151,19 @@ int ALRemoveFirst(AList list, int *size) {
  * Returns -1 in case of empty list.
  */
 int ALRemoveLast(AList list, int *size) {
-    // TODO Implement code here
-    return -1;
+    int i=0;
+    int returnValue;
+    if(list!=NULL){
+        while(list[i]!='\0'){
+            i++;
+        }
+        list[i-1]='\0';
+        returnValue=0;
+        (*size)--;
+    }
+    
+    else returnValue=-1;
+    return returnValue;
 }
 
 /*
@@ -182,6 +204,19 @@ int ALEmptyList(AList *list, int *size, int *dimension) {
  * Return -1 if memory allocation fails. 
  */
 int ALShrink(AList *list, int *size, int *dimension) {
-    // TODO Implement code here
-    return -1;
+    AList * cancella;
+    AList nuovo;
+    int i, returnValue;
+    nuovo=(AList)malloc((*size)*sizeof(int));
+    if(nuovo!=NULL){
+         for(i=0;i<(*size);i++){
+             nuovo[i]=(*list)[i];
+        }
+         free(*list);
+         *list=nuovo;
+         *dimension=*size;
+         returnValue=0;
+    }returnValue=-1;
+   
+    return returnValue;
 }
