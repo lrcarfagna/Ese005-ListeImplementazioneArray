@@ -16,7 +16,7 @@ int ALIncreaseAndCopy(AList *list, int size, int *dimension) {
  
     AList nuovoVettore=NULL;
     
-    if((*dimension)==0) *dimension=1;
+    if(*dimension==0) *dimension=1;
     nuovoVettore=(AList)malloc(2*(*dimension)*sizeof(int));
     if(nuovoVettore!=NULL){
         *dimension*=2;
@@ -44,7 +44,7 @@ int ALInsertAtBeginning(AList *list, int *size, int *dimension, int key) {
     int i;
     int r=0;
     
-    if((*size)==(*dimension)){
+    if(*size==*dimension){
         r=ALIncreaseAndCopy(list,*size,dimension);
     }
     if(r==0){
@@ -72,7 +72,7 @@ int ALInsertAtEnd(AList *list, int *size, int *dimension, int key) {
     int r=0;
     int i;
 
-        if((*size)==(*dimension)){
+        if(*size==*dimension){
             r=ALIncreaseAndCopy(list,*size,dimension);
         }
         if(r==0){
@@ -100,7 +100,7 @@ int ALInsertAtPosition(AList *list, int *size, int *dimension, int key, int posi
     int i;
     int r=0;
     
-        if(((*size)==(*dimension))&& (position>=0) && (position<((*dimension)*=2))){
+        if(*size==*dimension && position>=0){
             r=ALIncreaseAndCopy(list,*size,dimension);
         }
         if(((r==0) && (position>=0) && (position<*dimension))){
@@ -125,7 +125,7 @@ int ALGetKey(AList list, int size, int position, int *key) {
     int returnValue=-1;
     int dimension =0;
 
-    if((position<size) && (position>=0) && (size>0)){
+    if(position<size && position>=0 && size>0){
         *key=list[position];
         returnValue=0;
     }
@@ -193,7 +193,7 @@ int ALRemoveLast(AList list, int *size) {
     int i=0;
     int returnValue=-1;
     
-    if((*size)>0){
+    if(*size>0){
         (*size)--;
         returnValue=0;
     }
@@ -216,7 +216,7 @@ int ALRemoveAtPosition(AList list, int *size, int position) {
     int returnValue=-1;
     int i;
     
-    if(position<(*size) && (size>0)){
+    if(position < *size && *size>0){
         for(i=position;i<(*size)-1;i++){
             list[i]=list[i+1];
         }
@@ -240,7 +240,7 @@ int ALEmptyList(AList *list, int *size, int *dimension) {
     
     int returnValue=-1;
     
-    if((*size)>0){
+    if(*size>0){
         free(*list);
         *dimension=0;
         *size=0;
@@ -262,7 +262,7 @@ int ALShrink(AList *list, int *size, int *dimension) {
     int i;
     int returnValue=-1;
     nuovo=(AList)malloc((*size)*sizeof(int));
-    if((*size)<(*dimension) && (nuovo!=NULL)){
+    if(*size<*dimension && nuovo!=NULL){
          for(i=0;i<(*size);i++){
              nuovo[i]=(*list)[i];
          }
