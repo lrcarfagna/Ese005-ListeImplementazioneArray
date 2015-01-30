@@ -12,8 +12,10 @@
  */
 int ALIncreaseAndCopy(AList *list, int size, int *dimension) {
     int i;
-    int returnValue;
-    AList nuovoVettore;
+    int returnValue=-1;
+ 
+    AList nuovoVettore=NULL;
+    
     if((*dimension)==0) *dimension=1;
     nuovoVettore=(AList)malloc(2*(*dimension)*sizeof(int));
     if(nuovoVettore!=NULL){
@@ -24,7 +26,7 @@ int ALIncreaseAndCopy(AList *list, int size, int *dimension) {
         free(*list);
         *list=nuovoVettore;
         returnValue=0;
-    }else returnValue=-1;
+    }
     return returnValue;
 }
 
@@ -38,16 +40,20 @@ int ALIncreaseAndCopy(AList *list, int size, int *dimension) {
  * Returns -1 if memory allocation fails.
  */
 int ALInsertAtBeginning(AList *list, int *size, int *dimension, int key) {
-    int returnValue,i;
+    int returnValue=-1;
+    int i;
+    int r=0;
+    
     if((*size)==(*dimension)){
-        returnValue=ALIncreaseAndCopy(list,*size,dimension);
+        r=ALIncreaseAndCopy(list,*size,dimension);
     }
-    if(returnValue==0){
+    if(r==0){
         for(i=*size;i>0;i--){
             (*list)[i]=(*list)[i-1];
         }
         (*list)[0]=key;
         (*size)++;
+        returnValue=0;
     }
     return returnValue;
 }
@@ -62,14 +68,19 @@ int ALInsertAtBeginning(AList *list, int *size, int *dimension, int key) {
  * Returns -1 if memory allocation fails.
  */
 int ALInsertAtEnd(AList *list, int *size, int *dimension, int key) {
-    int returnValue,i;
-    if((*size)==(*dimension)){
-        returnValue=ALIncreaseAndCopy(list,*size,dimension);
-    }
-    if(returnValue==0){
-        (*list)[*size]=key;
-        (*size)++;
-    }
+    int returnValue=-1;
+    int r=0;
+    int i;
+
+        if((*size)==(*dimension)){
+            r=ALIncreaseAndCopy(list,*size,dimension);
+        }
+        if(r==0){
+            (*list)[*size]=key;
+            (*size)++;
+            returnValue=0;
+        }
+    
     return returnValue;
 }
 
@@ -85,8 +96,23 @@ int ALInsertAtEnd(AList *list, int *size, int *dimension, int key) {
  * Returns -1 if memory allocation fails.
  */
 int ALInsertAtPosition(AList *list, int *size, int *dimension, int key, int position) {
-    // TODO Implement code here
-    return -1;
+    int returnValue=-1;
+    int i;
+    int r=0;
+    
+        if(((*size)==(*dimension))&& (position>=0) && (position<((*dimension)*=2))){
+            r=ALIncreaseAndCopy(list,*size,dimension);
+        }
+        if(((r==0) && (position>=0) && (position<*dimension))){
+            for(i=((*dimension)-1);i>position;i--){
+                (*list)[i]=(*list)[i-1];
+            }
+            (*list)[i]=key;
+            (*size)++;
+            returnValue=0;
+        }
+    
+    return returnValue;
 }
 
 /*
@@ -96,16 +122,14 @@ int ALInsertAtPosition(AList *list, int *size, int *dimension, int key, int posi
  * Returns -1 if there is no key at the specified position
  */ 
 int ALGetKey(AList list, int size, int position, int *key) {
-    int returnValue;
-    int dimension=0;
-    if(list!=NULL){
-        if(position<size){
-            *key=list[position];
-             returnValue=0;
-        }else returnValue=-1;
+    int returnValue=-1;
+    int dimension =0;
+
+    if((position<size) && (position>=0) && (size>0)){
+        *key=list[position];
+        returnValue=0;
     }
-    else returnValue=-1;
-    
+ 
     return returnValue;
 }
 
@@ -117,8 +141,22 @@ int ALGetKey(AList list, int size, int position, int *key) {
  * Returns -1 if not found. 
  */ 
 int ALFindKey(AList list, int size, int key, int startPosition, int *position) {
-    // TODO Implement code here
-    return -1;
+    
+    int trovato=0; //se=0, nessun elemento trovato; se=1 elemento trovato.
+    int returnValue=-1;
+    int i=startPosition;
+    
+    
+    while(i<size && trovato==0){
+        if(list[i]==key){
+            *position=i;
+            trovato=1;
+            returnValue=0;
+        }
+        i++;
+    }
+    
+    return returnValue;
 }
 
 /*
@@ -131,8 +169,8 @@ int ALFindKey(AList list, int size, int key, int startPosition, int *position) {
  */
 int ALRemoveFirst(AList list, int *size) {
     int i=0;
-    int returnValue;
-    if(list!=NULL){
+    int returnValue=-1;
+    if(*size>0){
         for(i=0;i<*size;i++){
             list[i]=list[i+1];
         }
@@ -140,7 +178,6 @@ int ALRemoveFirst(AList list, int *size) {
         (*size)--;
     }
     
-    else returnValue=-1;
     return returnValue;
 }
 
@@ -154,14 +191,13 @@ int ALRemoveFirst(AList list, int *size) {
  */
 int ALRemoveLast(AList list, int *size) {
     int i=0;
-    int returnValue;
-    if(list!=NULL){
-        list[(*size)-1]=NULL;
-        returnValue=0;
+    int returnValue=-1;
+    
+    if((*size)>0){
         (*size)--;
+        returnValue=0;
     }
     
-    else returnValue=-1;
     return returnValue;
 }
 
@@ -177,8 +213,18 @@ int ALRemoveLast(AList list, int *size) {
  * Returns -1 in case it does not exist any element at the specified position
  */
 int ALRemoveAtPosition(AList list, int *size, int position) {
-    // TODO Implement code here
-    return -1;
+    int returnValue=-1;
+    int i;
+    
+    if(position<(*size) && (size>0)){
+        for(i=position;i<(*size)-1;i++){
+            list[i]=list[i+1];
+        }
+        (*size)--;
+        returnValue=0;   
+    }
+    
+    return returnValue;
 }
 
 /*
@@ -191,8 +237,16 @@ int ALRemoveAtPosition(AList list, int *size, int position) {
  * Return -1 in case of emtpy list. 
  */
 int ALEmptyList(AList *list, int *size, int *dimension) {
-    // TODO Implement code here
-    return -1;
+    
+    int returnValue=-1;
+    
+    if((*size)>0){
+        free(*list);
+        *dimension=0;
+        *size=0;
+        returnValue=0;
+    }
+    return returnValue;
 }
 
 
@@ -205,18 +259,18 @@ int ALEmptyList(AList *list, int *size, int *dimension) {
 int ALShrink(AList *list, int *size, int *dimension) {
 
     AList nuovo;
-    int i, returnValue;
+    int i;
+    int returnValue=-1;
     nuovo=(AList)malloc((*size)*sizeof(int));
-    if(nuovo!=NULL){
+    if((*size)<(*dimension) && (nuovo!=NULL)){
          for(i=0;i<(*size);i++){
              nuovo[i]=(*list)[i];
-        }
+         }
          free(*list);
          *list=nuovo;
          *dimension=*size;
          returnValue=0;
     }
-    else returnValue=-1;
    
     return returnValue;
 }
