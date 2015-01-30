@@ -21,6 +21,7 @@ int ALIncreaseAndCopy(AList *list, int size, int *dimension) {
         for(i=0;i<size;i++){
             nuovoVettore[i]=(*list)[i];
         }
+        free(*list);
         *list=nuovoVettore;
         returnValue=0;
     }else returnValue=-1;
@@ -37,18 +38,18 @@ int ALIncreaseAndCopy(AList *list, int size, int *dimension) {
  * Returns -1 if memory allocation fails.
  */
 int ALInsertAtBeginning(AList *list, int *size, int *dimension, int key) {
-    int r,i;
+    int returnValue,i;
     if((*size)==(*dimension)){
-        r=ALIncreaseAndCopy(list,*size,dimension);
+        returnValue=ALIncreaseAndCopy(list,*size,dimension);
     }
-    if(r==0){
+    if(returnValue==0){
         for(i=*size;i>0;i--){
             (*list)[i]=(*list)[i-1];
         }
         (*list)[0]=key;
         (*size)++;
     }
-    return r;
+    return returnValue;
 }
 
 /*
@@ -61,8 +62,15 @@ int ALInsertAtBeginning(AList *list, int *size, int *dimension, int key) {
  * Returns -1 if memory allocation fails.
  */
 int ALInsertAtEnd(AList *list, int *size, int *dimension, int key) {
-    // TODO Implement code here
-    return -1;
+    int returnValue,i;
+    if((*size)==(*dimension)){
+        returnValue=ALIncreaseAndCopy(list,*size,dimension);
+    }
+    if(returnValue==0){
+        (*list)[*size]=key;
+        (*size)++;
+    }
+    return returnValue;
 }
 
 /*
@@ -88,19 +96,14 @@ int ALInsertAtPosition(AList *list, int *size, int *dimension, int key, int posi
  * Returns -1 if there is no key at the specified position
  */ 
 int ALGetKey(AList list, int size, int position, int *key) {
-    int i=0,returnValue;
+    int returnValue;
     int dimension=0;
     if(list!=NULL){
-        while(list[i]!='\0'){
-            i++;
-        }
-        dimension=i;
-    }
-    if(position<dimension){
+        if(position<size){
             *key=list[position];
              returnValue=0;
+        }else returnValue=-1;
     }
-    
     else returnValue=-1;
     
     return returnValue;
@@ -130,9 +133,8 @@ int ALRemoveFirst(AList list, int *size) {
     int i=0;
     int returnValue;
     if(list!=NULL){
-        while(list[i]!='\0'){
+        for(i=0;i<*size;i++){
             list[i]=list[i+1];
-            i++;
         }
         returnValue=0;
         (*size)--;
@@ -154,10 +156,7 @@ int ALRemoveLast(AList list, int *size) {
     int i=0;
     int returnValue;
     if(list!=NULL){
-        while(list[i]!='\0'){
-            i++;
-        }
-        list[i-1]='\0';
+        list[(*size)-1]=NULL;
         returnValue=0;
         (*size)--;
     }
@@ -204,7 +203,7 @@ int ALEmptyList(AList *list, int *size, int *dimension) {
  * Return -1 if memory allocation fails. 
  */
 int ALShrink(AList *list, int *size, int *dimension) {
-    AList * cancella;
+
     AList nuovo;
     int i, returnValue;
     nuovo=(AList)malloc((*size)*sizeof(int));
@@ -216,7 +215,8 @@ int ALShrink(AList *list, int *size, int *dimension) {
          *list=nuovo;
          *dimension=*size;
          returnValue=0;
-    }returnValue=-1;
+    }
+    else returnValue=-1;
    
     return returnValue;
 }
